@@ -183,6 +183,28 @@ La diferencia entre el primero y el tercero es que ahora se ven reflejados los r
 
 ### b) ![Ejer6-Obj](https://github.com/midel99/VirtualDreams-Challenge/blob/main/Ejer6-Obj.jpg?raw=true)
 
+### c) 
+```
+trigger ContactTrigger on Contact (after insert, after update) {
+    Contact contactToUpdate = trigger.new;
+    String idGet = contactToUpdate.idvirtualdreams;
+    Http http = new Http();
+    HttpRequest request = new HttpRequest();
+    request.setEndpoint('https://vdfactory-234311.firebaseio.com/contacts.json');
+    request.setMethod('GET');
+    HttpResponse response = http.send(request);
+
+    if (response.getStatusCode() == 200) {
+        Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+        List<Object> jsonList = (List<Object>) results.get();
+        Object filteredRegister = jsonList.Find() //compare with idGet and filter the correct register
+        contactToUpdate.email = filteredRegister.email;
+        update contactToUpdate;
+    }
+}
+
+```
+
 ## Exercise 7
 
 *Soluciones de Salesforce
